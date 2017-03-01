@@ -61,13 +61,20 @@ for version in "${versions[@]}"; do
 	)
 
 	case "$suite" in
-		jessie|trusty)
+		trusty|jessie)
 			packages+=( libsystemd-journal-dev )
 			# aarch64 doesn't have an official downloadable binary for go.
 			# And gccgo for trusty only includes Go 1.2 implementation which
 			# is too old to build current go source, fortunately trusty has
 			# golang-1.6-go package can be used as bootstrap.
 			packages+=( golang-1.6-go )
+			;;
+		stretch)
+			packages+=( libsystemd-journal-dev )
+			packages+=( golang-1.6-go libseccomp-dev )
+
+			dockerBuildTags="$dockerBuildTags seccomp"
+			runcBuildTags="$runcBuildTags seccomp"
 			;;
 		xenial)
 			packages+=( libsystemd-dev )
